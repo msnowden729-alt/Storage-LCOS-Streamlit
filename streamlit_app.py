@@ -104,9 +104,3 @@ if st.button("Run Analysis"):
             st.pyplot(fig)
             st.markdown(f"**Plot {i+1}:** [Description here if needed]")
 
-
-    # -----------------------------------------------------
-    # OPTIONAL DEBUG LOG
-    # -----------------------------------------------------
-    with st.expander("Show console output (debug)"):
-        st.text(console_log)
