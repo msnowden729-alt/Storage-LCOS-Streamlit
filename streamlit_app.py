@@ -46,6 +46,15 @@ selected_Tamb = [
     arctic_mean_annual,
     baseline_mean_annual
 ]
+common_inputs = {
+    "Power": Power,
+    "DD": DD,
+    "charges_per_year": charges_per_year,
+    "selected_Tamb": selected_Tamb,
+    "Powercost": Powercost,
+    "interest_rate": interest_rate,
+    "project_lifespan": project_lifespan,
+}
 
 # -------------------------------
 # RUN BUTTON
