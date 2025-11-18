@@ -10,9 +10,9 @@ from matplotlib.path import Path
 from matplotlib.patches import PathPatch
 import matplotlib.colors as mcolors
 
-def run(common_inputs):
+#def run(common_inputs):
 
-#def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
+def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
 
     # List of subprogram module names
     subprograms = [
@@ -783,6 +783,7 @@ def run(common_inputs):
     
         # Note: All prints are commented out, only plots are shown via plt.show()
         # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
 
 
 
