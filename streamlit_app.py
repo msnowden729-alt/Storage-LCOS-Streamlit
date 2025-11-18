@@ -67,8 +67,14 @@ if st.button("Run LCOS Model"):
     # SUPPRESS CONSOLE OUTPUT FROM ALL SUBPROGRAMS
     # -----------------------------------------------------
     f = io.StringIO()
-    with redirect_stdout(f):
-        results = master_script.run(inputs)
+    try:
+        with redirect_stdout(f):
+            results = master_script.run(inputs)
+    except Exception as e:
+        st.error("Master script crashed:")
+        st.exception(e)
+        results = None
+   
 
     console_log = f.getvalue()  # suppressed but accessible
 
