@@ -278,8 +278,9 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
 
     # Labels and title
     ax.set_ylabel('Average LCOS Change (%)')
-    ax.set_title(f'Average LCOS Change in the Arctic by Technology \nP = {common_inputs['Power']:0.0f}MW, Power @ {common_inputs['Powercost']:0.2f} USD/kWh')
-
+    #ax.set_title(f'Average LCOS Change in the Arctic by Technology \nP = {common_inputs['Power']:0.0f}MW, Power @ {common_inputs['Powercost']:0.2f} USD/kWh')
+    ax.set_title(f'Average LCOS Change in the Arctic by Technology \nP = {common_inputs["Power"]:0.0f}MW, Power @ {common_inputs["Powercost"]:0.2f} USD/kWh')
+    
     # Add value labels above bars
     for bar, value in zip(bars, avg_LCOSchange):
         if not np.isnan(value):
@@ -783,6 +784,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     
         # Note: All prints are commented out, only plots are shown via plt.show()
         # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
 
 
 
