@@ -46,6 +46,18 @@ selected_Tamb = [
     arctic_mean_annual,
     baseline_mean_annual
 ]
+
+# Helper function (updated for Streamlit column)
+def safe_metric(col, label, value, fmt="{:,.2f}"):
+    if value is None or (isinstance(value, float) and np.isnan(value)):
+        col.error(f"{label}: N/A")
+    else:
+        try:
+            formatted = fmt.format(value)
+            col.metric(label, formatted)
+        except (ValueError, TypeError):
+            col.error(f"{label}: Error")
+            
 common_inputs = {
     "Power": Power,
     "DD": DD,
@@ -55,6 +67,7 @@ common_inputs = {
     "interest_rate": interest_rate,
     "project_lifespan": project_lifespan,
 }
+
 
 # -------------------------------
 # RUN BUTTON
@@ -91,16 +104,6 @@ if st.button("Run Analysis"):
             st.pyplot(fig)
             st.markdown(f"**Plot {i+1}:** [Description here if needed]")
 
-# Helper function (updated for Streamlit column)
-def safe_metric(col, label, value, fmt="{:,.2f}"):
-    if value is None or (isinstance(value, float) and np.isnan(value)):
-        col.error(f"{label}: N/A")
-    else:
-        try:
-            formatted = fmt.format(value)
-            col.metric(label, formatted)
-        except (ValueError, TypeError):
-            col.error(f"{label}: Error")
 
     # -----------------------------------------------------
     # OPTIONAL DEBUG LOG
