@@ -745,18 +745,19 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                   ha='left', va='bottom', fontsize=12)  # Increased font size
 
     plt.show()
+    
+    return {
+        "baselineCAPEX": baselineCAPEX,
+        "baselineOPEX": baselineOPEX,
+        "newCAPEX": newCAPEX,
+        "newOPEX": newOPEX,
+        "baseLCOS": baseLCOS,
+        "newLCOS": newLCOS,
+        "LCOSchange": LCOSchange,
+        "baselinestorage": baselinestorage,
+    }
+    
+        # Note: All prints are commented out, only plots are shown via plt.show()
+        # The function implicitly returns None, but displays the figures inline when run in an interactive environment
 
-return {
-    "baselineCAPEX": baselineCAPEX,
-    "baselineOPEX": baselineOPEX,
-    "newCAPEX": newCAPEX,
-    "newOPEX": newOPEX,
-    "baseLCOS": baseLCOS,
-    "newLCOS": newLCOS,
-    "LCOSchange": LCOSchange,
-    "baselinestorage": baselinestorage,
-}
-
-    # Note: All prints are commented out, only plots are shown via plt.show()
-    # The function implicitly returns None, but displays the figures inline when run in an interactive environment
 
