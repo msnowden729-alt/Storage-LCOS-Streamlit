@@ -4,6 +4,7 @@ import os
 import io
 from contextlib import redirect_stdout
 import glob
+import numpy as np
 
 st.set_page_config(page_title="Arctic Energy Storage LCOS Model", layout="wide")
 
