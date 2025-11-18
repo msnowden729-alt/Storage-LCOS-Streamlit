@@ -20,7 +20,6 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
         "BESScalcs",
         "CAEScalcs",
         "Flywheelcalcs"
-    #    "subprogram_b"
     ]
 
     results = []
@@ -747,5 +746,17 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
 
     plt.show()
 
+return {
+    "baselineCAPEX": baselineCAPEX,
+    "baselineOPEX": baselineOPEX,
+    "newCAPEX": newCAPEX,
+    "newOPEX": newOPEX,
+    "baseLCOS": baseLCOS,
+    "newLCOS": newLCOS,
+    "LCOSchange": LCOSchange,
+    "baselinestorage": baselinestorage,
+}
+
     # Note: All prints are commented out, only plots are shown via plt.show()
     # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
