@@ -10,8 +10,9 @@ from matplotlib.path import Path
 from matplotlib.patches import PathPatch
 import matplotlib.colors as mcolors
 
+def run(common_inputs):
 
-def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
+#def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
 
     # List of subprogram module names
     subprograms = [
@@ -23,6 +24,16 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     ]
 
     results = []
+    # --- Initialize required output variables so they always exist ---
+    baselineCAPEX = np.nan
+    baselineOPEX = np.nan
+    newCAPEX = np.nan
+    newOPEX = np.nan
+    baseLCOS = np.nan
+    newLCOS = np.nan
+    LCOSchange = np.nan
+    baselinestorage = np.nan
+
 
     if common_inputs['DD'] * 2 * common_inputs['charges_per_year'] > 8760:
         raise ValueError(f"DISCHARGE DURATION AND CYCLE FREQUENCY EXCEED THE AVAILABLE HOURS IN A YEAR.")
@@ -38,9 +49,18 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                     raise ValueError(f"{key} missing in output of {module_name}")
 
             results.append({ "program": module_name, **output })
+            # If this module produced valid outputs, update the top-level variables
+            baselineCAPEX = output.get("baselineCAPEX", baselineCAPEX)
+            baselineOPEX = output.get("baselineOPEX", baselineOPEX)
+            newCAPEX = output.get("newCAPEX", newCAPEX)
+            newOPEX = output.get("newOPEX", newOPEX)
+            baseLCOS = output.get("baseLCOS", baseLCOS)
+            newLCOS = output.get("newLCOS", newLCOS)
+            LCOSchange = output.get("LCOSchange", LCOSchange)
+            baselinestorage = output.get("baselinestorage", baselinestorage)
         except Exception as e:
-            pass
-            # print(f"[ERROR] {module_name}: {e}")  # Commented out
+            print(f"[ERROR] {module_name}: {e}")
+            continue
 
     # Postprocess: Print results in a formatted table
     # Define table parameters
@@ -137,7 +157,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                             output = module.run(common_inputs)
                             
                             # Validate expected keys (relax baseLCOS requirement)
-                            required_keys = ["LCOSchange", "newLCOS", "baselineCAPEX", "newCAPEX", "newOPEX"]
+                            required_keys = ["baseLCOS", "newLCOS"]
                             missing_keys = [key for key in required_keys if key not in output]
                             
                             newLCOS_values[k, i, j] = output["newLCOS"]
@@ -151,17 +171,6 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                             LCOSchange_values[k, i, j] = np.nan
                     
                     # Find the index and value of the subprogram with the lowest newLCOS and baseLCOS
-                    """
-                    valid_newLCOS = newLCOS_values[:, i, j]
-                    valid_baseLCOS = baseLCOS_values[:, i, j]
-                    valid_LCOSchange = LCOSchange_values[:, i, j]
-                    if np.any(~np.isnan(valid_newLCOS)):
-                        min_newLCOS_indices[i, j] = np.nanargmin(valid_newLCOS)
-                        min_newLCOS[i, j] = np.nanmin(valid_newLCOS)
-                    if np.any(~np.isnan(valid_baseLCOS)):
-                        min_baseLCOS_indices[i, j] = np.nanargmin(valid_baseLCOS)
-                        min_baseLCOS[i, j] = np.nanmin(valid_baseLCOS)
-                        min_LCOSchange[i,j] = np.nanmin(valid_LCOSchange)"""
                     
                     valid_newLCOS = newLCOS_values[:, i, j]
                     valid_baseLCOS = baseLCOS_values[:, i, j]
@@ -211,7 +220,8 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
 
     # Adjust subplot spacing
     fig.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
-    plt.show()
+    #plt.show()
+    plt.close(fig)
 
     #########################################################################################################################
     ##################### AVERAGES THE LCOS CHANGE OVER EACH TECHNOLOGY ##########################
@@ -281,10 +291,9 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
             )
 
     plt.tight_layout()
-    plt.show()
+    #plt.show()
+    plt.close(fig)
 
-
- 
 
     # Define unique markers for each subprogram
     markers = ['o', 's', '^', 'D', '*']  # Circle, square, triangle, diamond, star
@@ -328,7 +337,9 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
 
     # Adjust subplot spacing
     fig.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
-    plt.show()
+    #plt.show()
+    plt.close(fig)
+
 
     # Save marker map from newLCOS (right subplot)
     marker_map = marker_array_base  # Array of markers corresponding to min_newLCOS_indices
@@ -381,7 +392,8 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     # Add legend with black markers
     ax3.legend(handles=legend_elements, title='Storage Technology', loc='upper right', fontsize=8)
 
-    plt.show()
+    #plt.show()
+    plt.close(fig)
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height] to 
@@ -416,8 +428,9 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     cbar3.ax.text(1.2, 0.95, f'${vmax:.2f}', transform=cbar3.ax.transAxes, 
                   ha='left', va='bottom', fontsize=10)
 
-    plt.show()
-    
+    #plt.show()
+    plt.close(fig)
+
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height] to 
     # Mask invalid (NaN) data points
@@ -451,7 +464,9 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     cbar3.ax.text(1.2, 0.92, f'${vmax:.2f}\\n USD/kWh', transform=cbar3.ax.transAxes, 
                   ha='left', va='bottom', fontsize=10)
 
-    plt.show()
+    #plt.show()
+    plt.close(fig)
+
     # Create custom colormap: white for invalid (-1), then specified colors for subprograms
     colors = ['white'] + [subprogram_colors[prog] for prog in subprograms]
     custom_cmap = ListedColormap(colors)
@@ -489,7 +504,9 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
 
     # Adjust subplot spacing
     fig.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
-    plt.show()
+    #plt.show()
+    plt.close(fig)
+
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height]
@@ -524,7 +541,8 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     cbar3.ax.text(1.2, 0.95, f'${vmax:.2f}', transform=cbar3.ax.transAxes, 
                   ha='left', va='bottom', fontsize=12)  # Increased font size
 
-    plt.show()
+    #plt.show()
+    plt.close(fig)
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height]
@@ -558,7 +576,8 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     cbar3.ax.text(1.2, 0.95, f'${vmax:.2f}', transform=cbar3.ax.transAxes, 
                   ha='left', va='bottom', fontsize=12)
 
-    plt.show()
+    #plt.show()
+    plt.close(fig)
 
     # Create custom colormap: white for invalid (-1), then specified colors for subprograms
     colors = ['white'] + [subprogram_colors[prog] for prog in subprograms]
@@ -599,7 +618,8 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
 
     # Adjust subplot spacing
     fig.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
-    plt.show()
+#    plt.show()
+    plt.close(fig)
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height]
@@ -634,7 +654,8 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     cbar3.ax.text(1.2, 0.95, f'${vmax:.2f}', transform=cbar3.ax.transAxes, 
                   ha='left', va='bottom', fontsize=12)  # Increased font size
 
-    plt.show()
+    #plt.show()
+    plt.close(fig)
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height]
@@ -668,7 +689,8 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     cbar3.ax.text(1.2, 0.95, f'${vmax:.2f}', transform=cbar3.ax.transAxes, 
                   ha='left', va='bottom', fontsize=12)
 
-    plt.show()
+   # plt.show()
+    plt.close(fig)
 
     # Create custom colormap: white for invalid (-1), then specified colors for subprograms
     colors = ['white'] + [subprogram_colors[prog] for prog in subprograms]
@@ -709,7 +731,8 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
 
     # Adjust subplot spacing
     fig.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
-    plt.show()
+  #  plt.show()
+    plt.close(fig)
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height]
@@ -744,8 +767,9 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     cbar3.ax.text(1.2, 0.95, f'${vmax:.2f}', transform=cbar3.ax.transAxes, 
                   ha='left', va='bottom', fontsize=12)  # Increased font size
 
-    plt.show()
-    
+   # plt.show()
+    plt.close(fig)
+
     return {
         "baselineCAPEX": baselineCAPEX,
         "baselineOPEX": baselineOPEX,
@@ -759,5 +783,6 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     
         # Note: All prints are commented out, only plots are shown via plt.show()
         # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
 
 
