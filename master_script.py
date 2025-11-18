@@ -20,6 +20,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
         "BESScalcs",
         "CAEScalcs",
         "Flywheelcalcs"
+    #    "subprogram_b"
     ]
 
     results = []
