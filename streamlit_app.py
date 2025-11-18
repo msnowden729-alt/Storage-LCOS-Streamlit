@@ -3,7 +3,7 @@ import master_script
 import os
 import io
 from contextlib import redirect_stdout
-from glob import glob
+import glob
 
 st.set_page_config(page_title="Arctic Energy Storage LCOS Model", layout="wide")
 
@@ -19,12 +19,12 @@ col1, col2 = st.columns(2)
 with col1:
     Power = st.number_input("Power (MW)", value=100.0)
     DD = st.number_input("Discharge Duration (hours)", value=1.0)
-    charges_per_year = st.number_input("Charges per Year", value=372.76)
+    charges_per_year = st.number_input("Charges per Year", value=300)
     Powercost = st.number_input("Electricity Cost (USD/kWh)", value=0.05)
 
 with col2:
     interest_rate = st.number_input("Discount Rate", value=0.08)
-    project_lifespan = st.number_input("Project Lifespan (years)", value=50)
+    project_lifespan = st.number_input("Project Lifespan (years)", value=20)
 
 st.subheader("Temperature Inputs (°C)")
 
@@ -130,8 +130,12 @@ if st.button("Run LCOS Model"):
     # -----------------------------------------------------
     st.header("Generated Plots")
 
-    plot_files = sorted(glob("*.png") + glob("*.jpg") + glob("*.jpeg"))
-
+    plot_files = sorted(
+        glob.glob("*.png")
+        + glob.glob("*.jpg")
+        + glob.glob("*.jpeg")
+    )
+    
     if len(plot_files) == 0:
         st.warning("No plots were found. Ensure master_script saves figures to PNG files.")
     else:
