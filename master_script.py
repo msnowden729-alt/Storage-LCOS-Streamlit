@@ -24,6 +24,8 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     ]
 
     results = []
+    figures = []
+    
     # --- Initialize required output variables so they always exist ---
     baselineCAPEX = np.nan
     baselineOPEX = np.nan
@@ -221,7 +223,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     # Adjust subplot spacing
     fig.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
     #plt.show()
-    plt.close(fig)
+    figures.append(fig)  # ADD: Collect the fig
 
     #########################################################################################################################
     ##################### AVERAGES THE LCOS CHANGE OVER EACH TECHNOLOGY ##########################
@@ -292,9 +294,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
             )
 
     plt.tight_layout()
-    #plt.show()
-    plt.close(fig)
-
+    figures.append(fig)  # ADD: Collect the fig
 
     # Define unique markers for each subprogram
     markers = ['o', 's', '^', 'D', '*']  # Circle, square, triangle, diamond, star
@@ -338,8 +338,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
 
     # Adjust subplot spacing
     fig.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
-    #plt.show()
-    plt.close(fig)
+    figures.append(fig)  # ADD: Collect the fig
 
 
     # Save marker map from newLCOS (right subplot)
@@ -394,7 +393,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     ax3.legend(handles=legend_elements, title='Storage Technology', loc='upper right', fontsize=8)
 
     #plt.show()
-    plt.close(fig)
+    figures.append(fig)  # ADD: Collect the fig
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height] to 
@@ -429,8 +428,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     cbar3.ax.text(1.2, 0.95, f'${vmax:.2f}', transform=cbar3.ax.transAxes, 
                   ha='left', va='bottom', fontsize=10)
 
-    #plt.show()
-    plt.close(fig)
+    figures.append(fig3)  # ADD: Collect the fig
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height] to 
@@ -466,7 +464,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                   ha='left', va='bottom', fontsize=10)
 
     #plt.show()
-    plt.close(fig)
+    figures.append(fig3)  # ADD: Collect the fig
 
     # Create custom colormap: white for invalid (-1), then specified colors for subprograms
     colors = ['white'] + [subprogram_colors[prog] for prog in subprograms]
@@ -506,7 +504,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     # Adjust subplot spacing
     fig.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
     #plt.show()
-    plt.close(fig)
+    figures.append(fig)  # ADD: Collect the fig
 
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
@@ -543,7 +541,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                   ha='left', va='bottom', fontsize=12)  # Increased font size
 
     #plt.show()
-    plt.close(fig)
+    figures.append(fig3)  # ADD: Collect the fig
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height]
@@ -578,7 +576,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                   ha='left', va='bottom', fontsize=12)
 
     #plt.show()
-    plt.close(fig)
+    figures.append(fig3)  # ADD: Collect the fig
 
     # Create custom colormap: white for invalid (-1), then specified colors for subprograms
     colors = ['white'] + [subprogram_colors[prog] for prog in subprograms]
@@ -620,7 +618,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     # Adjust subplot spacing
     fig.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
 #    plt.show()
-    plt.close(fig)
+    figures.append(fig)  # ADD: Collect the fig
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height]
@@ -656,7 +654,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                   ha='left', va='bottom', fontsize=12)  # Increased font size
 
     #plt.show()
-    plt.close(fig)
+    figures.append(fig3)  # ADD: Collect the fig
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height]
@@ -691,7 +689,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                   ha='left', va='bottom', fontsize=12)
 
    # plt.show()
-    plt.close(fig)
+    figures.append(fig3)  # ADD: Collect the fig
 
     # Create custom colormap: white for invalid (-1), then specified colors for subprograms
     colors = ['white'] + [subprogram_colors[prog] for prog in subprograms]
@@ -733,8 +731,8 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     # Adjust subplot spacing
     fig.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
   #  plt.show()
-    plt.close(fig)
-
+    figures.append(fig)
+    
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height]
 
@@ -769,21 +767,16 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                   ha='left', va='bottom', fontsize=12)  # Increased font size
 
    # plt.show()
-    plt.close(fig)
-
+    figures.append(fig3)
+        
     return {
-        "baselineCAPEX": baselineCAPEX,
-        "baselineOPEX": baselineOPEX,
-        "newCAPEX": newCAPEX,
-        "newOPEX": newOPEX,
-        "baseLCOS": baseLCOS,
-        "newLCOS": newLCOS,
-        "LCOSchange": LCOSchange,
-        "baselinestorage": baselinestorage,
-    }
+            "results_list": results,  # NEW: Full list for table
+            "figures": figures,       # NEW: List of all figures
+        }
     
         # Note: All prints are commented out, only plots are shown via plt.show()
         # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
 
 
 
