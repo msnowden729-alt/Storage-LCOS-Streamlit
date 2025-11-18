@@ -95,6 +95,8 @@ if st.button("Run Analysis"):
                 # Your safe_metric calls, adapted for each res
                 safe_metric(st, "Baseline CAPEX ($M)", res.get("baselineCAPEX", np.nan) / 1e6, "{:,.1f}")
                 safe_metric(st, "New CAPEX ($M)", res.get("newCAPEX", np.nan) / 1e6, "{:,.1f}")
+                safe_metric(st, "Baseline OPEX ($M)", res.get("baselineOPEX", np.nan) / 1e6, "{:,.1f}")
+                safe_metric(st, "New OPEX ($M)", res.get("newOPEX", np.nan) / 1e6, "{:,.1f}")
                 safe_metric(st, "LCOS Change (%)", res.get("LCOSchange", np.nan), "{:,.1f}%")
                 # Add more metrics as needed...
 
