@@ -428,7 +428,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                   ha='left', va='bottom', fontsize=10)
 
     figures.append(fig3)  # ADD: Collect the fig
-"""
+    """
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height] to 
     # Mask invalid (NaN) data points
@@ -775,6 +775,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     
         # Note: All prints are commented out, only plots are shown via plt.show()
         # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
 
 
 
