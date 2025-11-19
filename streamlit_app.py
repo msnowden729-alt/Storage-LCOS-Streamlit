@@ -109,12 +109,29 @@ if st.button("Run Analysis"):
         2: "Minimum Levelised Cost Gradient in Mild (Left) vs. Arctic (Right) Climates, USD/kWh",
         }
 
+      
         for i, fig in enumerate(figures):
-            #st.pyplot(fig, use_container_width=True)  # Auto-scales to container width (smaller on mobile)
-            desc = plot_descriptions.get(i, f"Plot {i+1}: Untitled")  # Fallback if index missing
-
-            with st.expander(f"Plot {i+1}: {desc}", expanded=(i < 3)):  # Only first 3 open on mobile
-                st.image(output, caption=desc, width=400)
-           # st.markdown(f"**{desc}**")
-            st.markdown("---")  # Separator (optional)
-
+            try:
+                # Save to PNG bytes
+                output = io.BytesIO()
+                fig.savefig(output, format='png', bbox_inches='tight', dpi=100, facecolor='white')  # Explicit facecolor to avoid transparency issues
+                output.seek(0)  # CRITICAL: Reset pointer to start (often missed)
+                
+                # Validate: Check non-empty and PNG header
+                img_bytes = output.getvalue()
+                if len(img_bytes) == 0 or not img_bytes.startswith(b'\x89PNG'):
+                    raise ValueError(f"Invalid PNG for plot {i+1}: {len(img_bytes)} bytes")
+                
+                # Desc from your dict
+                desc = plot_descriptions.get(i, f"Plot {i+1}: Untitled")
+                
+                # Display scaled
+                st.image(img_bytes, caption=desc, width=400)  # Or 500 for slightly larger
+                
+                output.close()  # Clean up
+            except Exception as e:
+                st.error(f"Failed to render Plot {i+1}: {e}")
+                st.image("https://via.placeholder.com/400x300?text=Plot+Error", width=400)  # Fallback placeholder
+            
+            st.markdown("---")  # Separator
+    
