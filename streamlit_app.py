@@ -204,7 +204,12 @@ if st.button("Run Analysis"):
     # PLOTS — SHRINKED WITHOUT DISTORTION
     # ---------------------------------------------------------
     st.subheader("Generated Plots")
-
+    plot_descriptions = {
+    0: "Best Storage Technology Comparison: Mild (Left) vs. Arctic (Right) Climates",
+    1: "Average Levelized Cost Change by Technology",
+    2: "Minimum Levelised Cost Gradient in Mild (Left) vs. Arctic (Right) Climates, USD/kWh",
+    }
+    
     for i, fig in enumerate(figs):
         # Save fig to buffer
         buf = io.BytesIO()
@@ -218,8 +223,8 @@ if st.button("Run Analysis"):
         new_size = (int(w * scale), int(h * scale))
         img_resized = img.resize(new_size, Image.Resampling.LANCZOS)
 
-        st.image(img_resized, caption=f"Plot {i+1}", use_container_width=False)
-
+        st.image(img_resized, caption=plot_descriptions, use_container_width=False)
+        st.markdown("---")
 
     # Debug console output
     with st.expander("Console Output (Debug)"):
