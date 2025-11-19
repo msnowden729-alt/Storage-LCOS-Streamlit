@@ -6,23 +6,6 @@ from contextlib import redirect_stdout
 import glob
 import numpy as np
 
-st.markdown("""
-<style>
-/* Compress cells/columns only (no header shrink) */
-[data-testid="stDataFrame"] td { 
-    font-size: 11px !important; padding: 2px 4px !important;  /* Small font + tight padding for cells */
-}
-.metric-container div div { 
-    font-size: 11px !important; padding: 1px !important;  /* Metric values */
-}
-.metric-container label { 
-    font-size: 13px !important;  /* Headers/labels: Slightly smaller but readable (reverted from 11px) */
-}
-/* Column gaps: Minimal horizontal space */
-.element-container { gap: 2px !important; }  /* Tightens column spacing */
-</style>
-""", unsafe_allow_html=True)
-
 st.set_page_config(page_title="Arctic Energy Storage LCOS Model", layout="wide")
 
 st.title("Arctic Energy Storage LCOS Model")
@@ -99,21 +82,42 @@ if st.button("Run Analysis"):
     if not results_list:
         st.error("No results generated. Check inputs and subprograms.")
     else:
+        # TABLE OUTPUT
         st.subheader("Key Metrics by Storage Technology")
         
-        cols = st.columns(len(results_list), gap="small")  # Zero gap: Packs columns tightly to full width
+        # --- Make table text smaller + tighten layout
+        st.markdown("""
+        <style>
+        .small-font {
+            font-size: 12px !important;
+            line-height: 1.0 !important;
+        }
+        .stMetric {
+            font-size: 12px !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        num_progs = len(results_list)
+        cols = st.columns(num_progs, gap="small")
         
         for idx, res in enumerate(results_list):
             with cols[idx]:
+        
                 prog_name = res["program"].replace("calcs", "").upper()
-                st.markdown(f"**{prog_name}**")
-                
-                safe_metric(st.container(), "Base CAPEX ($M)", res.get("baselineCAPEX", np.nan) / 1e6, "{:,.1f}")
-                safe_metric(st.container(), "New CAPEX ($M)", res.get("newCAPEX", np.nan) / 1e6, "{:,.1f}")
-                safe_metric(st.container(), "Base OPEX ($M)", res.get("baselineOPEX", np.nan) / 1e6, "{:,.1f}")
-                safe_metric(st.container(), "New OPEX ($M)", res.get("newOPEX", np.nan) / 1e6, "{:,.1f}")
-                safe_metric(st.container(), "Base LCOS ($/kWh)", res.get("baseLCOS", np.nan), "{:,.2f}")
-                safe_metric(st.container(), "Change (%)", res.get("LCOSchange", np.nan), "{:,.1f}%")
+                st.markdown(f"<h4 class='small-font'>{prog_name}</h4>", unsafe_allow_html=True)
+        
+                st.markdown("<div class='small-font'>", unsafe_allow_html=True)
+        
+                safe_metric(st, "Baseline CAPEX ($M)", res.get("baselineCAPEX", np.nan) / 1e6, "{:,.1f}")
+                safe_metric(st, "New CAPEX ($M)", res.get("newCAPEX", np.nan) / 1e6, "{:,.1f}")
+                safe_metric(st, "Baseline OPEX ($M)", res.get("baselineOPEX", np.nan) / 1e6, "{:,.1f}")
+                safe_metric(st, "New OPEX ($M)", res.get("newOPEX", np.nan) / 1e6, "{:,.1f}")
+                safe_metric(st, "Baseline LCOS ($/kWh)", res.get("baseLCOS", np.nan), "{:,.1f}")
+                safe_metric(st, "Arctic LCOS Change (%)", res.get("LCOSchange", np.nan), "{:,.1f}%")
+        
+                st.markdown("</div>", unsafe_allow_html=True)
+
 
         # FIXED PLOTS: Display all figures
         st.subheader("Generated Plots")
@@ -123,29 +127,11 @@ if st.button("Run Analysis"):
         2: "Minimum Levelised Cost Gradient in Mild (Left) vs. Arctic (Right) Climates, USD/kWh",
         }
 
-      
+        st.subheader("Generated Plots")
+        
         for i, fig in enumerate(figures):
-            try:
-                # Save to PNG bytes
-                output = io.BytesIO()
-                fig.savefig(output, format='png', bbox_inches='tight', dpi=100, facecolor='white')  # Explicit facecolor to avoid transparency issues
-                output.seek(0)  # CRITICAL: Reset pointer to start (often missed)
-                
-                # Validate: Check non-empty and PNG header
-                img_bytes = output.getvalue()
-                if len(img_bytes) == 0 or not img_bytes.startswith(b'\x89PNG'):
-                    raise ValueError(f"Invalid PNG for plot {i+1}: {len(img_bytes)} bytes")
-                
-                # Desc from your dict
-                desc = plot_descriptions.get(i, f"Plot {i+1}: Untitled")
-                
-                # Display scaled
-                st.image(img_bytes, caption=desc, width=600)  # Or 500 for slightly larger
-                
-                output.close()  # Clean up
-            except Exception as e:
-                st.error(f"Failed to render Plot {i+1}: {e}")
-                st.image("https://via.placeholder.com/400x300?text=Plot+Error", width=600)  # Fallback placeholder
-            
+            fig.set_size_inches(5, 3.3)  # shrink while keeping proportions
+            st.pyplot(fig, use_container_width=True)
+            st.caption(f"Plot {i+1}")
             st.markdown("---")  # Separator
     
