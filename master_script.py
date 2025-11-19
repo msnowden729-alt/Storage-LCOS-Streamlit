@@ -266,7 +266,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
         colors.append(color_map.get(sp_clean, 'gray'))  # default to gray if not found
 
     # Create bar chart
-    fig1, ax = plt.subplots(figsize=(6, 4.5))
+    fig1, ax = plt.subplots(figsize=(5, 3.5))
     bars = ax.bar(
         range(len(subprograms)),
         avg_LCOSchange,
@@ -346,6 +346,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     
         # Note: All prints are commented out, only plots are shown via plt.show()
         # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
 
 
 
