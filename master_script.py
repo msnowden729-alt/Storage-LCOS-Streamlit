@@ -266,7 +266,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
         colors.append(color_map.get(sp_clean, 'gray'))  # default to gray if not found
 
     # Create bar chart
-    fig, ax = plt.subplots(figsize=(6, 4.5))
+    fig1, ax = plt.subplots(figsize=(6, 4.5))
     bars = ax.bar(
         range(len(subprograms)),
         avg_LCOSchange,
@@ -294,7 +294,6 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
             )
 
     plt.tight_layout()
-    figures.append(fig)  # ADD: Collect the fig
 
     # Define unique markers for each subprogram
     markers = ['o', 's', '^', 'D', '*']  # Circle, square, triangle, diamond, star
@@ -337,16 +336,16 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     ax2.legend(handles=legend_elements, title='Storage Technology', loc='upper right', fontsize=8)
 
     # Adjust subplot spacing
-    fig.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
-    figures.append(fig)  # ADD: Collect the fig
+    fig1.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
+    figures.append(fig1)  # ADD: Collect the fig
 
 
     # Save marker map from newLCOS (right subplot)
     marker_map = marker_array_base  # Array of markers corresponding to min_newLCOS_indices
 
     # Successive plot for min_LCOSchange using saved marker map
-    fig3 = plt.figure(figsize=(6, 4))
-    ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])
+    fig2 = plt.figure(figsize=(6, 4))
+    ax3 = fig2.add_axes([0.1, 0.1, 0.7, 0.8])
 
 
     # Mask invalid data points
@@ -378,7 +377,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     scatter3.set_norm(Normalize(vmin=vmin, vmax=vmax))
 
     # Add colorbar
-    cbar3 = fig3.colorbar(scatter3, ax=ax3, location='right', pad=0.01)
+    cbar3 = fig2.colorbar(scatter3, ax=ax3, location='right', pad=0.01)
     cbar3.set_label('Arctic LCOS Change (%)')
     cbar3.formatter = ticker.FuncFormatter(lambda x, pos: f'{x:.1f}%')
     #base_x = 2
@@ -393,7 +392,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     ax3.legend(handles=legend_elements, title='Storage Technology', loc='upper right', fontsize=8)
 
     #plt.show()
-    figures.append(fig)  # ADD: Collect the fig
+    figures.append(fig2)  # ADD: Collect the fig
 
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height] to 
@@ -429,7 +428,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                   ha='left', va='bottom', fontsize=10)
 
     figures.append(fig3)  # ADD: Collect the fig
-
+"""
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height] to 
     # Mask invalid (NaN) data points
@@ -767,7 +766,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
                   ha='left', va='bottom', fontsize=12)  # Increased font size
 
    # plt.show()
-    figures.append(fig3)
+    figures.append(fig3) """
         
     return {
             "results_list": results,  # NEW: Full list for table
@@ -776,6 +775,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     
         # Note: All prints are commented out, only plots are shown via plt.show()
         # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
 
 
 
