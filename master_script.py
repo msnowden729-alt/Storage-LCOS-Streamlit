@@ -322,7 +322,8 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     ax3.set_ylabel('Discharge Duration (hours)')
     ax3.set_title('Minimum LCOS in Arctic Climates')
 
-    base_x = 4
+    base_x = 
+    cbar3 = fig3.colorbar(scatter3, ax=[ax1, ax2], location='right')
     cbar3.locator = ticker.LogLocator(base=base_x)  
     cbar3.formatter = ticker.FuncFormatter(lambda val, pos: f'${val:.2f}/kWh')
 
@@ -345,6 +346,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     
         # Note: All prints are commented out, only plots are shown via plt.show()
         # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
 
 
 
