@@ -101,7 +101,7 @@ if st.button("Run Analysis"):
     else:
         st.subheader("Key Metrics by Storage Technology")
         
-        cols = st.columns(len(results_list), gap="none")  # Zero gap: Packs columns tightly to full width
+        cols = st.columns(len(results_list), gap="small")  # Zero gap: Packs columns tightly to full width
         
         for idx, res in enumerate(results_list):
             with cols[idx]:
