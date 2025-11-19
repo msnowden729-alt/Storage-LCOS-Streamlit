@@ -118,12 +118,12 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     end_exp = np.log(1024) / np.log(2)    # 
 
     # Generate 7 values evenly spaced in log base 4 space
-    log_space = np.linspace(start_exp, end_exp, 29)
+    log_space = np.linspace(start_exp, end_exp, 15)
 
     # Convert back to linear space
     DD_values = 2 ** log_space
     #DD_values = np.logspace(np.log10(0.0625), np.log10(1024), num=35, base=10)
-    charges_values = np.logspace(0, np.log10(10000), num=29, base=10)
+    charges_values = np.logspace(0, np.log10(10000), num=15, base=10)
 
     # Initialize arrays to store results
     newLCOS_values = np.full((len(subprograms), len(DD_values), len(charges_values)), np.nan)
@@ -346,6 +346,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     
         # Note: All prints are commented out, only plots are shown via plt.show()
         # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
 
 
 
