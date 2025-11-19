@@ -323,14 +323,14 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     ax3.set_title('Minimum LCOS in Arctic Climates')
 
     base_x = 4
-    cbar3 = fig3.colorbar(scatter3, ax=[ax3], location='right')
-    cbar3.locator = ticker.LogLocator(base=base_x)  
-    cbar3.formatter = ticker.FuncFormatter(lambda val, pos: f'${val:.2f}/kWh')
+
 
     # Add separate colorbars with currency format and min/max labels
     cbar3 = fig3.colorbar(scatter3, ax=ax3, location='right', pad=0.01)
+    cbar3.locator = ticker.LogLocator(base=base_x)  
+    cbar3.formatter = ticker.FuncFormatter(lambda val, pos: f'${val:.2f}/kWh')
     cbar3.set_label('Arctic LCOS (USD/kWh)')
-    cbar3.update_ticks()
+    #cbar3.update_ticks()
 
     cbar3.ax.text(1.2, 0.00, f'${vmin:.2f}', transform=cbar3.ax.transAxes, 
                   ha='left', va='top', fontsize=10)
@@ -346,6 +346,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     
         # Note: All prints are commented out, only plots are shown via plt.show()
         # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
 
 
 
