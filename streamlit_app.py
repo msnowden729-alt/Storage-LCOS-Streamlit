@@ -6,13 +6,20 @@ from contextlib import redirect_stdout
 import glob
 import numpy as np
 
-# ADD: CSS for smaller vertical gaps (rows)
 st.markdown("""
 <style>
-/* Reduce gaps between rows/metrics */
-.metric-container { margin-bottom: 2px !important; padding-bottom: 2px !important; }  /* Tighten metric spacing */
-.stMarkdown { margin-bottom: 4px !important; }  /* Smaller space after headers/markdown */
-.stContainer > div { padding: 4px 0 !important; }  /* Overall container row gaps */
+/* Compress cells/columns only (no header shrink) */
+[data-testid="stDataFrame"] td { 
+    font-size: 11px !important; padding: 2px 4px !important;  /* Small font + tight padding for cells */
+}
+.metric-container div div { 
+    font-size: 11px !important; padding: 1px !important;  /* Metric values */
+}
+.metric-container label { 
+    font-size: 13px !important;  /* Headers/labels: Slightly smaller but readable (reverted from 11px) */
+}
+/* Column gaps: Minimal horizontal space */
+.element-container { gap: 2px !important; }  /* Tightens column spacing */
 </style>
 """, unsafe_allow_html=True)
 
@@ -92,18 +99,15 @@ if st.button("Run Analysis"):
     if not results_list:
         st.error("No results generated. Check inputs and subprograms.")
     else:
-        # FULL-WIDTH METRICS: All columns span container width
         st.subheader("Key Metrics by Storage Technology")
         
-        # Create columns that fill full width (no gaps)
-        cols = st.columns(len(results_list), gap="small")  # Small gap between columns
+        cols = st.columns(len(results_list), gap="none")  # Zero gap: Packs columns tightly to full width
         
         for idx, res in enumerate(results_list):
             with cols[idx]:
                 prog_name = res["program"].replace("calcs", "").upper()
-                st.markdown(f"**{prog_name}**")  # Compact header
+                st.markdown(f"**{prog_name}**")
                 
-                # Stack your metrics (full width within column)
                 safe_metric(st.container(), "Base CAPEX ($M)", res.get("baselineCAPEX", np.nan) / 1e6, "{:,.1f}")
                 safe_metric(st.container(), "New CAPEX ($M)", res.get("newCAPEX", np.nan) / 1e6, "{:,.1f}")
                 safe_metric(st.container(), "Base OPEX ($M)", res.get("baselineOPEX", np.nan) / 1e6, "{:,.1f}")
@@ -136,12 +140,12 @@ if st.button("Run Analysis"):
                 desc = plot_descriptions.get(i, f"Plot {i+1}: Untitled")
                 
                 # Display scaled
-                st.image(img_bytes, caption=desc, width=500)  # Or 500 for slightly larger
+                st.image(img_bytes, caption=desc, width=600)  # Or 500 for slightly larger
                 
                 output.close()  # Clean up
             except Exception as e:
                 st.error(f"Failed to render Plot {i+1}: {e}")
-                st.image("https://via.placeholder.com/400x300?text=Plot+Error", width=400)  # Fallback placeholder
+                st.image("https://via.placeholder.com/400x300?text=Plot+Error", width=600)  # Fallback placeholder
             
             st.markdown("---")  # Separator
     
