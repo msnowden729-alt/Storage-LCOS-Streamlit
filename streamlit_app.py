@@ -97,7 +97,8 @@ if st.button("Run Analysis"):
                 safe_metric(st, "New CAPEX ($M)", res.get("newCAPEX", np.nan) / 1e6, "{:,.1f}")
                 safe_metric(st, "Baseline OPEX ($M)", res.get("baselineOPEX", np.nan) / 1e6, "{:,.1f}")
                 safe_metric(st, "New OPEX ($M)", res.get("newOPEX", np.nan) / 1e6, "{:,.1f}")
-                safe_metric(st, "LCOS Change (%)", res.get("LCOSchange", np.nan), "{:,.1f}%")
+                safe_metric(st, "Baseline LCOS ($M)", res.get("baseLCOS", np.nan) / 1e6, "{:,.1f}")
+                safe_metric(st, "Arctic LCOS Change (%)", res.get("LCOSchange", np.nan), "{:,.1f}%")
                 # Add more metrics as needed...
 
         # FIXED PLOTS: Display all figures
