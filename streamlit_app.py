@@ -6,6 +6,16 @@ from contextlib import redirect_stdout
 import glob
 import numpy as np
 
+# ADD: CSS for smaller vertical gaps (rows)
+st.markdown("""
+<style>
+/* Reduce gaps between rows/metrics */
+.metric-container { margin-bottom: 2px !important; padding-bottom: 2px !important; }  /* Tighten metric spacing */
+.stMarkdown { margin-bottom: 4px !important; }  /* Smaller space after headers/markdown */
+.stContainer > div { padding: 4px 0 !important; }  /* Overall container row gaps */
+</style>
+""", unsafe_allow_html=True)
+
 st.set_page_config(page_title="Arctic Energy Storage LCOS Model", layout="wide")
 
 st.title("Arctic Energy Storage LCOS Model")
@@ -82,24 +92,24 @@ if st.button("Run Analysis"):
     if not results_list:
         st.error("No results generated. Check inputs and subprograms.")
     else:
-        # FIXED TABLE: Display metrics for ALL subprograms
+        # FULL-WIDTH METRICS: All columns span container width
         st.subheader("Key Metrics by Storage Technology")
-        num_progs = len(results_list)
-        cols = st.columns(num_progs)  # Dynamic columns for all subprograms
+        
+        # Create columns that fill full width (no gaps)
+        cols = st.columns(len(results_list), gap="small")  # Small gap between columns
         
         for idx, res in enumerate(results_list):
             with cols[idx]:
                 prog_name = res["program"].replace("calcs", "").upper()
-                st.markdown(f"### {prog_name}")
+                st.markdown(f"**{prog_name}**")  # Compact header
                 
-                # Your safe_metric calls, adapted for each res
-                safe_metric(st, "Baseline CAPEX ($M)", res.get("baselineCAPEX", np.nan) / 1e6, "{:,.1f}")
-                safe_metric(st, "New CAPEX ($M)", res.get("newCAPEX", np.nan) / 1e6, "{:,.1f}")
-                safe_metric(st, "Baseline OPEX ($M)", res.get("baselineOPEX", np.nan) / 1e6, "{:,.1f}")
-                safe_metric(st, "New OPEX ($M)", res.get("newOPEX", np.nan) / 1e6, "{:,.1f}")
-                safe_metric(st, "Baseline LCOS ($/kWh)", res.get("baseLCOS", np.nan), "{:,.1f}")
-                safe_metric(st, "Arctic LCOS Change (%)", res.get("LCOSchange", np.nan), "{:,.1f}%")
-                # Add more metrics as needed...
+                # Stack your metrics (full width within column)
+                safe_metric(st.container(), "Base CAPEX ($M)", res.get("baselineCAPEX", np.nan) / 1e6, "{:,.1f}")
+                safe_metric(st.container(), "New CAPEX ($M)", res.get("newCAPEX", np.nan) / 1e6, "{:,.1f}")
+                safe_metric(st.container(), "Base OPEX ($M)", res.get("baselineOPEX", np.nan) / 1e6, "{:,.1f}")
+                safe_metric(st.container(), "New OPEX ($M)", res.get("newOPEX", np.nan) / 1e6, "{:,.1f}")
+                safe_metric(st.container(), "Base LCOS ($/kWh)", res.get("baseLCOS", np.nan), "{:,.2f}")
+                safe_metric(st.container(), "Change (%)", res.get("LCOSchange", np.nan), "{:,.1f}%")
 
         # FIXED PLOTS: Display all figures
         st.subheader("Generated Plots")
@@ -126,7 +136,7 @@ if st.button("Run Analysis"):
                 desc = plot_descriptions.get(i, f"Plot {i+1}: Untitled")
                 
                 # Display scaled
-                st.image(img_bytes, caption=desc, width=400)  # Or 500 for slightly larger
+                st.image(img_bytes, caption=desc, width=500)  # Or 500 for slightly larger
                 
                 output.close()  # Clean up
             except Exception as e:
