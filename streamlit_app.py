@@ -103,7 +103,15 @@ if st.button("Run Analysis"):
 
         # FIXED PLOTS: Display all figures
         st.subheader("Generated Plots")
+        plot_descriptions = {
+        0: "Best Storage Technology Comparison: Mild (Left) vs. Arctic (Right) Climates",
+        1: "Average Levelized Cost Change by Technology",
+        2: "Minimum Levelised Cost Gradient in Mild (Left) vs. Arctic (Right) Climates, USD/kWh",
+        }
+
         for i, fig in enumerate(figures):
-            st.pyplot(fig)
-            st.markdown(f"**Plot {i+1}:** [Description here if needed]")
+            st.pyplot(fig, use_container_width=True)  # Auto-scales to container width (smaller on mobile)
+            desc = plot_descriptions.get(i, f"Plot {i+1}: Untitled")  # Fallback if index missing
+            st.markdown(f"**{desc}**")
+            st.markdown("---")  # Separator (optional)
 
