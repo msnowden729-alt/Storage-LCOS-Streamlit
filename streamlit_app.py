@@ -170,9 +170,9 @@ if st.button("Run Analysis"):
 
     # --- REMOVE THE MESSAGE AFTER CALCULATION ---
     explanation_box.empty()
-
-        results_list = outs.get("results_list", [])
-        figs = outs.get("figures", [])
+    
+    results_list = output.get("results_list", [])
+    figures = output.get("figures", [])
 
 
     # ---------------------------------------------------------
