@@ -145,10 +145,31 @@ common_inputs = {
 # RUN button
 # ---------------------------------------------------------
 if st.button("Run Analysis"):
+
+     # --- SHOW EXPLANATION WHILE CODE RUNS ---
+    explanation_box = st.empty()
+    explanation_box.markdown("""
+    How the LCOS Model Works:
+
+    This model compares **Levelized Cost of Storage (LCOS)** across five
+    storage technologies in both **baseline** and **Arctic** climates.
+
+    While the computation runs, the model evaluates:
+    - **CAPEX differences** (construction, insulation, heating, cooling)
+    - **OPEX differences** (heating loads, cooling savings, charging losses)
+    - **Thermal performance penalties**
+    - **Replacement cycles & discounted lifetime energy**
+    - **Arctic vs. baseline LCOS**
+    """)
+    
     with st.spinner("Computing model outputs..."):
         f = io.StringIO()
         with redirect_stdout(f):
             outs = master_script.run(common_inputs)
+
+
+    # --- REMOVE THE MESSAGE AFTER CALCULATION ---
+    explanation_box.empty()
 
         results_list = outs.get("results_list", [])
         figs = outs.get("figures", [])
