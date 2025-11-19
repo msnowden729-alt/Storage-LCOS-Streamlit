@@ -110,7 +110,9 @@ if st.button("Run Analysis"):
         }
 
         for i, fig in enumerate(figures):
-            st.pyplot(fig, use_container_width=True)  # Auto-scales to container width (smaller on mobile)
+            #st.pyplot(fig, use_container_width=True)  # Auto-scales to container width (smaller on mobile)
+            with st.expander(f"Plot {i+1}: {desc}", expanded=(i < 2)):  # Only first 2 open on mobile
+                st.image(output, caption=desc, width=400)
             desc = plot_descriptions.get(i, f"Plot {i+1}: Untitled")  # Fallback if index missing
             st.markdown(f"**{desc}**")
             st.markdown("---")  # Separator (optional)
