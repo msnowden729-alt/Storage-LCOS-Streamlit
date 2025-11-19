@@ -205,9 +205,9 @@ if st.button("Run Analysis"):
     # ---------------------------------------------------------
     st.subheader("Generated Plots")
     plot_descriptions = {
-    0: "Best Storage Technology Comparison: Mild (Left) vs. Arctic (Right) Climates",
-    1: "Average Levelized Cost Change by Technology",
-    2: "Minimum Levelised Cost Gradient in Mild (Left) vs. Arctic (Right) Climates, USD/kWh",
+    "Best Storage Technology Comparison: Mild (Left) vs. Arctic (Right) Climates",
+    "Average Levelized Cost Change by Technology",
+    "Minimum Levelised Cost Gradient in Mild (Left) vs. Arctic (Right) Climates, USD/kWh",
     }
     
     for i, fig in enumerate(figs):
@@ -223,7 +223,7 @@ if st.button("Run Analysis"):
         new_size = (int(w * scale), int(h * scale))
         img_resized = img.resize(new_size, Image.Resampling.LANCZOS)
 
-        st.image(img_resized, caption=plot_descriptions, use_container_width=False)
+        st.image(img_resized, caption=plot_descriptions[i], use_container_width=False)
         st.markdown("---")
 
     # Debug console output
