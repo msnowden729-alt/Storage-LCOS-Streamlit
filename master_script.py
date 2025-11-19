@@ -295,105 +295,15 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
 
     plt.tight_layout()
 
-    # Define unique markers for each subprogram
-    markers = ['o', 's', '^', 'D', '*']  # Circle, square, triangle, diamond, star
-
-    # Define custom diamond path
-    diamond_vertices = np.array([
-        [0, 1], [1, 0], [0, -1], [-1, 0], [0, 1]  # Top, right, bottom, left, close
-    ])
-    diamond_codes = [Path.MOVETO] + [Path.LINETO] * 3 + [Path.CLOSEPOLY]
-    diamond_path = Path(diamond_vertices, diamond_codes)
-
-    # Create side-by-side subplots for subprogram indices
-
     # Mask invalid data points
     Z_flat_base = np.ma.masked_array(min_baseLCOS_indices.ravel(), mask=np.isnan(min_baseLCOS_indices.ravel()))
     Z_flat_new = np.ma.masked_array(min_newLCOS_indices.ravel(), mask=np.isnan(min_newLCOS_indices.ravel()))
-
-    # Create marker arrays
-    marker_array_base = np.array([markers[int(idx)] if idx >= 0 else 'o' for idx in Z_flat_base.filled(-1)])
-    marker_array_new = np.array([markers[int(idx)] if idx >= 0 else 'o' for idx in Z_flat_new.filled(-1)])
-
-    # Define marker paths dictionary
-    marker_paths = {
-        'o': Path.unit_circle(),
-        's': Path.unit_rectangle(),
-        '^': Path.unit_regular_polygon(3),
-        'D': diamond_path,
-        '*': Path.unit_regular_polygon(6)
-    }
-
-
-    # Create legend with black markers
-    legend_elements = [
-        PathPatch(marker_paths['o'], facecolor='black', edgecolor='white', label='H2'),
-        PathPatch(marker_paths['s'], facecolor='black', edgecolor='white', label='PHS'),
-        PathPatch(marker_paths['^'], facecolor='black', edgecolor='white', label='BESS'),
-        PathPatch(marker_paths['D'], facecolor='black', edgecolor='white', label='CAES'),
-        PathPatch(marker_paths['*'], facecolor='black', edgecolor='white', label='Flywheel')
-    ]
-    ax2.legend(handles=legend_elements, title='Storage Technology', loc='upper right', fontsize=8)
 
     # Adjust subplot spacing
     fig1.subplots_adjust(left=0.05, right=0.75, wspace=0.2)
     figures.append(fig1)  # ADD: Collect the fig
 
-
-    # Save marker map from newLCOS (right subplot)
-    marker_map = marker_array_base  # Array of markers corresponding to min_newLCOS_indices
-
-    # Successive plot for min_LCOSchange using saved marker map
-    fig2 = plt.figure(figsize=(6, 4))
-    ax3 = fig2.add_axes([0.1, 0.1, 0.7, 0.8])
-
-
-    # Mask invalid data points
-    Z_LCOSchange = np.ma.masked_invalid(min_LCOSchange)
-    X_flat_masked = np.ma.masked_array(X_flat, mask=np.isnan(min_LCOSchange.ravel()))
-    Y_flat_masked = np.ma.masked_array(Y_flat, mask=np.isnan(min_LCOSchange.ravel()))
-
-    # Scatter plot with saved marker map
-    scatter3 = ax3.scatter(X_flat_masked, Y_flat_masked, c=Z_LCOSchange.ravel(), cmap='plasma', 
-                          s=50, marker='o', edgecolors='white', linewidth=0.5)
-    paths_lcos = [marker_paths[marker] for marker in marker_map]
-    scatter3.set_paths(paths_lcos)
-    for idx, prog in enumerate(subprograms):
-        mask = marker_map == markers[idx]
-        # print(f"LCOSchange {prog.replace('calcs', '')}: {np.sum(mask)} points, Marker: {markers[idx]}")
-        pass
-    # print(f"LCOSchange Range: Min={np.nanmin(Z_LCOSchange):.1f}%, Max={np.nanmax(Z_LCOSchange):.1f}%")
-
-    ax3.set_xscale('log', base=10)
-    ax3.set_yscale('log', base=4)
-    ax3.set_xlabel('Charges per Year (CPY)')
-    ax3.set_ylabel('Discharge Duration (hours)')
-    ax3.set_title(f'LCOS Change in Arctic Climates \nfor Baseline Technology (%)')
-
-    # Use specified colorbar range
-    vmin = np.min(np.ma.masked_invalid(min_LCOSchange))
-    #vmax = np.max(np.ma.masked_invalid(min_LCOSchange))
-    vmax = 20
-    scatter3.set_norm(Normalize(vmin=vmin, vmax=vmax))
-
-    # Add colorbar
-    cbar3 = fig2.colorbar(scatter3, ax=ax3, location='right', pad=0.01)
-    cbar3.set_label('Arctic LCOS Change (%)')
-    cbar3.formatter = ticker.FuncFormatter(lambda x, pos: f'{x:.1f}%')
-    #base_x = 2
-    #cbar3.locator = ticker.LogLocator(base=base_x)  
-
-    cbar3.update_ticks()
-    #cbar3.ax.text(1.2, 0.00, f'{vmin:.1f}%+', transform=cbar3.ax.transAxes, ha='left', va='top', fontsize=10)
-    cbar3.ax.text(1.2, 0.98, f'            +', transform=cbar3.ax.transAxes, 
-                  ha='left', va='bottom', fontsize=10)
-
-    # Add legend with black markers
-    ax3.legend(handles=legend_elements, title='Storage Technology', loc='upper right', fontsize=8)
-
-    #plt.show()
-    figures.append(fig2)  # ADD: Collect the fig
-
+    
     fig3 = plt.figure(figsize=(6, 4))  # Adjust size as needed
     ax3 = fig3.add_axes([0.1, 0.1, 0.7, 0.8])  # [left, bottom, width, height] to 
     # Mask invalid data points
@@ -775,6 +685,7 @@ def run(common_inputs: dict) -> dict:    # Define common inputs if not provided
     
         # Note: All prints are commented out, only plots are shown via plt.show()
         # The function implicitly returns None, but displays the figures inline when run in an interactive environment
+
 
 
 
