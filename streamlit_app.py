@@ -106,8 +106,6 @@ The full background and methodology for this tool is captured in the <a href="ht
 
 st.header("Input Parameters")
 
-
-
 col1, col2 = st.columns(2)
 
 with col1:
@@ -194,8 +192,11 @@ if st.button("Run Analysis"):
         st.markdown("<div class='metric-row'>", unsafe_allow_html=True)
 
         for res in results_list:
-            prog = res["program"].replace("calcs", "").upper()
-
+            #prog = res["program"].replace("calcs", "").upper()
+            prog = {
+                'Hydrogen (H2)','Pumped Hydropower Storage (PHS)', 'Lithium-Ion Battery (BESS)','Adiabatic Compressed Air Energy Storage (CAES)','Flywheel'
+            }
+            
             st.markdown(f"<div class='metric-col'>", unsafe_allow_html=True)
             st.markdown(f"<div class='metric-header'>{prog}</div>", unsafe_allow_html=True)
 
@@ -239,7 +240,6 @@ if st.button("Run Analysis"):
     "Minimum Levelised Cost Gradient in Mild (Left) vs. Arctic (Right) Climates, USD/kWh",
     ]
 
-    
     for i, fig in enumerate(figs):
         # Save fig to buffer
         buf = io.BytesIO()
