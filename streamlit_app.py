@@ -187,68 +187,51 @@ if st.button("Run Analysis"):
         st.error("No results were returned.")
     else:
         st.subheader("Key Metrics by Storage Technology")
-
-        st.markdown("<div class='metric-row'>", unsafe_allow_html=True)
-
+    
+        # Map raw program names to nicer names
         full_names = {
             "H2": "Hydrogen (H2)",
             "PHS": "Pumped Hydropower Storage (PHS)",
             "BESS": "Lithium-Ion Battery (BESS)",
             "CAES": "Adiabatic Compressed Air Energy Storage (CAES)",
-            "FLYWHEEL": "Flywheel"  # Adjust if uppercased prog_short is "FLYWHEEL"
-            }
-
-        data = {  # Dict: Keys = full program names (columns); Values = list of metric values (rows)
-        full_names[0]: [results_list[0].get("baselineCAPEX", np.nan) / 1e6,  # Row 1: Baseline CAPEX for H2
-                             results_list[0].get("newCAPEX", np.nan) / 1e6,       # Row 2: New CAPEX for H2
-                             results_list[0].get("baselineOPEX", np.nan)/1e6,           # Row 6: Change for H2
-                             results_list[0].get("newOPEX", np.nan)/1e6,           # Row 6: Change for H2
-                             results_list[0].get("baseLCOS", np.nan),           # Row 6: Change for H2
-                             results_list[0].get("LCOSchange", np.nan)],           # Row 6: Change for H2
-        full_names[1]: [results_list[1].get("baselineCAPEX", np.nan) / 1e6,   
-                             results_list[1].get("newCAPEX", np.nan) / 1e6,       
-                             results_list[1].get("baselineOPEX", np.nan)/1e6,          
-                             results_list[1].get("newOPEX", np.nan)/1e6,           
-                             results_list[1].get("baseLCOS", np.nan),           
-                             results_list[1].get("LCOSchange", np.nan)],     
-        full_names[2]: [results_list[2].get("baselineCAPEX", np.nan) / 1e6,   
-                             results_list[2].get("newCAPEX", np.nan) / 1e6,       
-                             results_list[2].get("baselineOPEX", np.nan)/1e6,          
-                             results_list[2].get("newOPEX", np.nan)/1e6,           
-                             results_list[2].get("baseLCOS", np.nan),           
-                             results_list[2].get("LCOSchange", np.nan)],  
-        full_names[3]: [results_list[3].get("baselineCAPEX", np.nan)/1e6,   
-                             results_list[3].get("newCAPEX", np.nan)/1e6,       
-                             results_list[3].get("baselineOPEX", np.nan)/1e6,          
-                             results_list[3].get("newOPEX", np.nan)/1e6,           
-                             results_list[3].get("baseLCOS", np.nan),           
-                             results_list[3].get("LCOSchange", np.nan)],  
-        full_names[4]: [results_list[4].get("baselineCAPEX", np.nan)/1e6,   
-                             results_list[4].get("newCAPEX", np.nan)/1e6,       
-                             results_list[4].get("baselineOPEX", np.nan)/1e6,          
-                             results_list[4].get("newOPEX", np.nan)/1e6,           
-                             results_list[4].get("baseLCOS", np.nan),           
-                             results_list[4].get("LCOSchange", np.nan)],  
+            "FLYWHEEL": "Flywheel"
         }
     
-        # Metric labels as row index
-        metric_labels = ["Baseline CAPEX ($M)", "New CAPEX ($M)", "Baseline OPEX ($M)", "New OPEX ($M)", 
-                         "Baseline LCOS ($/kWh)", "Arctic LCOS Change (%)"]
-        
-        df = pd.DataFrame(data, index=metric_labels).round(2)  # Rows = metrics, Columns = programs
-        
+        metric_labels = [
+            "Baseline CAPEX ($M)",
+            "New CAPEX ($M)",
+            "Baseline OPEX ($M)",
+            "New OPEX ($M)",
+            "Baseline LCOS ($/kWh)",
+            "Arctic LCOS Change (%)"
+        ]
+    
+        # Build DataFrame dynamically
+        data = {}
+    
+        for res in results_list:
+            prog_raw = res.get("program", "").replace("calcs", "").upper()
+            prog_name = full_names.get(prog_raw, prog_raw)
+    
+            data[prog_name] = [
+                res.get("baselineCAPEX", np.nan) / 1e6,
+                res.get("newCAPEX", np.nan) / 1e6,
+                res.get("baselineOPEX", np.nan) / 1e6,
+                res.get("newOPEX", np.nan) / 1e6,
+                res.get("baseLCOS", np.nan),
+                res.get("LCOSchange", np.nan),
+            ]
+    
+        df = pd.DataFrame(data, index=metric_labels)
+    
+        # Display responsive dataframe
         st.dataframe(
-            df,
-            use_container_width=True,     # Full width: Fits all columns to screen
-            hide_index=False,             # Shows metric labels as left column
-            column_config={               # Optional: Format columns (e.g., % for change)
-                "Arctic LCOS Change (%)": st.column_config.NumberColumn(format="%.1f%%"),
-                "Baseline LCOS ($/kWh)": st.column_config.NumberColumn(format="$%.2f"),
-                # Apply to CAPEX/OPEX if numeric
-            },
+            df.style.format({
+                col: "{:.2f}" for col in df.columns
+            }),
+            use_container_width=True,
+            hide_index=False
         )
-     
-
 
     # ---------------------------------------------------------
     # PLOTS — SHRINKED WITHOUT DISTORTION
