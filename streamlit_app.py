@@ -198,42 +198,58 @@ if st.button("Run Analysis"):
             "CAES": "Adiabatic Compressed Air Energy Storage (CAES)",
             "FLYWHEEL": "Flywheel"  # Adjust if uppercased prog_short is "FLYWHEEL"
             }
-        for res in results_list:
-            
-            prog_short = res["program"].replace("calcs", "").upper()
-            full_prog = full_names.get(prog_short, prog_short)  # Fallback to short if missing
-            
-            st.markdown(f"<div class='metric-col'>", unsafe_allow_html=True)
-            st.markdown(f"<div class='metric-header'>{full_prog}</div>", unsafe_allow_html=True)
 
-            # Compact metric cards
-            st.markdown(render_metric("Baseline CAPEX ($M)",
-                                      res.get("baselineCAPEX", np.nan) / 1e6, "{:,.1f}"),
-                        unsafe_allow_html=True)
-
-            st.markdown(render_metric("New CAPEX ($M)",
-                                      res.get("newCAPEX", np.nan) / 1e6, "{:,.1f}"),
-                        unsafe_allow_html=True)
-
-            st.markdown(render_metric("Baseline OPEX ($M)",
-                                      res.get("baselineOPEX", np.nan) / 1e6, "{:,.1f}"),
-                        unsafe_allow_html=True)
-
-            st.markdown(render_metric("New OPEX ($M)",
-                                      res.get("newOPEX", np.nan) / 1e6, "{:,.1f}"),
-                        unsafe_allow_html=True)
-
-            st.markdown(render_metric("Baseline LCOS ($/kWh)",
-                                      res.get("baseLCOS", np.nan), "{:,.3f}"),
-                        unsafe_allow_html=True)
-
-            st.markdown(render_metric("Arctic LCOS Change (%)",
-                                      res.get("LCOSchange", np.nan), "{:,.2f}"),
-                        unsafe_allow_html=True)
-
-            st.markdown("</div>", unsafe_allow_html=True)  # close metric-col
-
-        st.markdown("</div>", unsafe_allow_html=True)  # close metric-row
+        data = {  # Dict: Keys = full program names (columns); Values = list of metric values (rows)
+        prog_full_names[0]: [results_list[0].get("baselineCAPEX", np.nan) / 1e6,  # Row 1: Baseline CAPEX for H2
+                             results_list[0].get("newCAPEX", np.nan) / 1e6,       # Row 2: New CAPEX for H2
+                             results_list[0].get("baselineOPEX", np.nan)],           # Row 6: Change for H2
+                             results_list[0].get("newOPEX", np.nan)],           # Row 6: Change for H2
+                             results_list[0].get("baseLCOS", np.nan)],           # Row 6: Change for H2
+                             results_list[0].get("LCOSchange", np.nan)],           # Row 6: Change for H2
+        prog_full_names[1]: [results_list[1].get("baselineCAPEX", np.nan) / 1e6,   
+                             results_list[1].get("newCAPEX", np.nan) / 1e6,       
+                             results_list[1].get("baselineOPEX", np.nan)],          
+                             results_list[1].get("newOPEX", np.nan)],           
+                             results_list[1].get("baseLCOS", np.nan)],           
+                             results_list[1].get("LCOSchange", np.nan)],     
+        prog_full_names[2]: [results_list[2].get("baselineCAPEX", np.nan) / 1e6,   
+                             results_list[2].get("newCAPEX", np.nan) / 1e6,       
+                             results_list[2].get("baselineOPEX", np.nan)],          
+                             results_list[2].get("newOPEX", np.nan)],           
+                             results_list[2].get("baseLCOS", np.nan)],           
+                             results_list[2].get("LCOSchange", np.nan)],  
+        prog_full_names[3]: [results_list[3].get("baselineCAPEX", np.nan),   
+                             results_list[3].get("newCAPEX", np.nan),       
+                             results_list[3].get("baselineOPEX", np.nan)],          
+                             results_list[3].get("newOPEX", np.nan)],           
+                             results_list[3].get("baseLCOS", np.nan)],           
+                             results_list[3].get("LCOSchange", np.nan)],  
+        prog_full_names[4]: [results_list[4].get("baselineCAPEX", np.nan),   
+                             results_list[4].get("newCAPEX", np.nan),       
+                             results_list[4].get("baselineOPEX", np.nan)],          
+                             results_list[4].get("newOPEX", np.nan)],           
+                             results_list[4].get("baseLCOS", np.nan)],           
+                             results_list[4].get("LCOSchange", np.nan)],  
+    
+        }
+    
+        # Metric labels as row index
+        metric_labels = ["Baseline CAPEX ($M)", "New CAPEX ($M)", "Baseline OPEX ($M)", "New OPEX ($M)", 
+                         "Baseline LCOS ($/kWh)", "Arctic LCOS Change (%)"]
+        
+        df = pd.DataFrame(data, index=metric_labels).round(2)  # Rows = metrics, Columns = programs
+        
+        st.dataframe(
+            df,
+            use_container_width=True,     # Full width: Fits all columns to screen
+            hide_index=False,             # Shows metric labels as left column
+            column_config={               # Optional: Format columns (e.g., % for change)
+                "Arctic LCOS Change (%)": st.column_config.NumberColumn(format="%.1f%%"),
+                "Baseline LCOS ($/kWh)": st.column_config.NumberColumn(format="$%.2f"),
+                # Apply to CAPEX/OPEX if numeric
+            },
+        )
+     
 
 
     # ---------------------------------------------------------
