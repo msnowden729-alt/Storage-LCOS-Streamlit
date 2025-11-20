@@ -204,7 +204,7 @@ if st.button("Run Analysis"):
             full_prog = full_names.get(prog_short, prog_short)  # Fallback to short if missing
             
             st.markdown(f"<div class='metric-col'>", unsafe_allow_html=True)
-            st.markdown(f"<div class='metric-header'>{prog}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='metric-header'>{full_prog}</div>", unsafe_allow_html=True)
 
             # Compact metric cards
             st.markdown(render_metric("Baseline CAPEX ($M)",
