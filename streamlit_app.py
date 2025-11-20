@@ -160,14 +160,12 @@ if st.button("Run Analysis"):
     How the LCOS Model Works:
 
     This model compares **Levelized Cost of Storage (LCOS)** across five
-    storage technologies in both **baseline** and **Arctic** climates.
+    storage technologies in both **baseline** and **Arctic** scenarios.
 
     While the computation runs, the model evaluates:
-    - **CAPEX differences** (construction, insulation, heating, cooling)
-    - **OPEX differences** (heating loads, cooling savings, charging losses)
-    - **Thermal performance penalties**
-    - **Replacement cycles & discounted lifetime energy**
-    - **Arctic vs. baseline LCOS**
+    - **CAPEX Differences** (insulation, heaters, construction, FEED cost changes)
+    - **OPEX Differences** (increased heating, reduced cooling, charging cost changes)
+    - **Dispatched Storage Differences** (roundtrip efficiency and/or capacity changes)
     """)
     
     with st.spinner("Computing model outputs..."):
