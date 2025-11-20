@@ -191,11 +191,17 @@ if st.button("Run Analysis"):
 
         st.markdown("<div class='metric-row'>", unsafe_allow_html=True)
 
-        for res in results_list:
-            #prog = res["program"].replace("calcs", "").upper()
-            prog = {
-                'Hydrogen (H2)','Pumped Hydropower Storage (PHS)', 'Lithium-Ion Battery (BESS)','Adiabatic Compressed Air Energy Storage (CAES)','Flywheel'
+        full_names = {
+            "H2": "Hydrogen (H2)",
+            "PHS": "Pumped Hydropower Storage (PHS)",
+            "BESS": "Lithium-Ion Battery (BESS)",
+            "CAES": "Adiabatic Compressed Air Energy Storage (CAES)",
+            "FLYWHEEL": "Flywheel"  # Adjust if uppercased prog_short is "FLYWHEEL"
             }
+        for res in results_list:
+            
+            prog_short = res["program"].replace("calcs", "").upper()
+            full_prog = full_names.get(prog_short, prog_short)  # Fallback to short if missing
             
             st.markdown(f"<div class='metric-col'>", unsafe_allow_html=True)
             st.markdown(f"<div class='metric-header'>{prog}</div>", unsafe_allow_html=True)
