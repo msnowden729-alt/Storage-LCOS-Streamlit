@@ -99,7 +99,7 @@ st.title("Arctic Energy Storage LCOS Model")
 #ADD: Smaller-font summary below header
 st.markdown("""
 <div style="font-size: 12px; color: gray; margin-top: 0px; line-height: 1.2;">
-This tool quantifies the Levelized Cost of Storage (LCOS) for five major technologies-- Hydrogen (H2), Pumped Hydropower (PHS), Lithium-Ion Batteries (BESS), Compressed Air Energy Storage (CAES),  and Flywheels-- to reasses the competitive landscape for energy storage in Arctic climates as compared to to current <a href="https://energystorage.shinyapps.io/LCOSApp/" target="_blank">baseline models</a>.
+This tool quantifies the Levelized Cost of Storage (LCOS) for five major technologies-- **Hydrogen (H2), Pumped Hydropower (PHS), Lithium-Ion Batteries (BESS), Compressed Air Energy Storage (CAES),**  and **Flywheels**-- to reasses the competitive landscape for energy storage in Arctic climates as compared to to current <a href="https://energystorage.shinyapps.io/LCOSApp/" target="_blank">baseline models</a>.
 This tool accounts for Arctic-specific factors including Thermal Management System (TMS) customisation, increased heating and reducded cooling OPEX, rountrip efficiency changes, and storage capacity changes, to name a few.
 The full background and methodology for this tool is captured in the <a href="https://github.com/msnowden729-alt/storage-lcos-streamlit/blob/main/A%20Technoeconomic%20Assessment%20of%20Energy%20Storage%20Potential%20in%20Arctic%20Grid%20Systems_SNOWDEN.pdf" target="_blank">attached document</a>
 """, unsafe_allow_html=True)
