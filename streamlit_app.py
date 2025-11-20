@@ -188,13 +188,12 @@ if st.button("Run Analysis"):
     else:
         st.subheader("Key Metrics by Storage Technology")
     
-        # Map raw program names to nicer names
         full_names = {
-            "H2": "Hydrogen (H2)",
-            "PHS": "Pumped Hydropower <br>Storage (PHS)",
-            "BESS": "Lithium-Ion Battery<br>(BESS)",
-            "CAES": "Adiabatic Compressed Air<br>Energy Storage (CAES)",
-            "FLYWHEEL": "Flywheel"
+            "H2": "Hydrogen (H₂)",
+            "PHS": "Pumped Hydro Storage (PHS)",
+            "BESS": "Li-Ion Battery (BESS)",
+            "CAES": "CAES Energy Storage",
+            "FLYWHEEL": "Flywheel Storage"
         }
     
         metric_labels = [
@@ -208,7 +207,6 @@ if st.button("Run Analysis"):
     
         # Build DataFrame dynamically
         data = {}
-    
         for res in results_list:
             prog_raw = res.get("program", "").replace("calcs", "").upper()
             prog_name = full_names.get(prog_raw, prog_raw)
@@ -219,10 +217,20 @@ if st.button("Run Analysis"):
                 res.get("baselineOPEX", np.nan) / 1e6,
                 res.get("newOPEX", np.nan) / 1e6,
                 res.get("baseLCOS", np.nan),
-                res.get("LCOSchange", np.nan),
+                res.get("LCOSchange", np.nan)
             ]
     
         df = pd.DataFrame(data, index=metric_labels)
+    
+        # ---- MULTILINE COLUMN HEADERS ----
+        df = df.rename(columns={
+            "Hydrogen (H₂)": "Hydrogen<br>(H₂)",
+            "Pumped Hydro Storage (PHS)": "Pumped Hydro<br>Storage (PHS)",
+            "Li-Ion Battery (BESS)": "Li-Ion Battery<br>(BESS)",
+            "CAES Energy Storage": "CAES<br>Energy Storage",
+            "Flywheel Storage": "Flywheel<br>Storage"
+        })
+    
         # ---- CENTER ALL CELLS + HEADERS ----
         df_styled = df.style.set_properties(**{
             'text-align': 'center'
@@ -230,19 +238,12 @@ if st.button("Run Analysis"):
         df_styled = df_styled.set_table_styles([
             {"selector": "th", "props": [("text-align", "center")]}
         ])
-
-    st.dataframe(
-        df_styled.format("{:.2f}"),
-        use_container_width=True,
-        hide_index=False
-    )
     
-        # Display responsive dataframe
-    st.dataframe(
-        df.style.format("{:.2f}"),
-        use_container_width=True,
-        hide_index=False
-    )
+        st.dataframe(
+            df_styled.format("{:.2f}"),
+            use_container_width=True,
+            hide_index=False
+        )
 
     # ---------------------------------------------------------
     # PLOTS — SHRINKED WITHOUT DISTORTION
