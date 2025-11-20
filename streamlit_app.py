@@ -5,6 +5,7 @@ import io
 import os
 from contextlib import redirect_stdout
 from PIL import Image
+import pandas as pd
 
 st.set_page_config(page_title="Arctic Energy Storage LCOS Model", layout="wide")
 
@@ -202,35 +203,34 @@ if st.button("Run Analysis"):
         data = {  # Dict: Keys = full program names (columns); Values = list of metric values (rows)
         full_names[0]: [results_list[0].get("baselineCAPEX", np.nan) / 1e6,  # Row 1: Baseline CAPEX for H2
                              results_list[0].get("newCAPEX", np.nan) / 1e6,       # Row 2: New CAPEX for H2
-                             results_list[0].get("baselineOPEX", np.nan),           # Row 6: Change for H2
-                             results_list[0].get("newOPEX", np.nan),           # Row 6: Change for H2
+                             results_list[0].get("baselineOPEX", np.nan)/1e6,           # Row 6: Change for H2
+                             results_list[0].get("newOPEX", np.nan)/1e6,           # Row 6: Change for H2
                              results_list[0].get("baseLCOS", np.nan),           # Row 6: Change for H2
                              results_list[0].get("LCOSchange", np.nan)],           # Row 6: Change for H2
         full_names[1]: [results_list[1].get("baselineCAPEX", np.nan) / 1e6,   
                              results_list[1].get("newCAPEX", np.nan) / 1e6,       
-                             results_list[1].get("baselineOPEX", np.nan),          
-                             results_list[1].get("newOPEX", np.nan),           
+                             results_list[1].get("baselineOPEX", np.nan)/1e6,          
+                             results_list[1].get("newOPEX", np.nan)/1e6,           
                              results_list[1].get("baseLCOS", np.nan),           
                              results_list[1].get("LCOSchange", np.nan)],     
         full_names[2]: [results_list[2].get("baselineCAPEX", np.nan) / 1e6,   
                              results_list[2].get("newCAPEX", np.nan) / 1e6,       
-                             results_list[2].get("baselineOPEX", np.nan),          
-                             results_list[2].get("newOPEX", np.nan),           
+                             results_list[2].get("baselineOPEX", np.nan)/1e6,          
+                             results_list[2].get("newOPEX", np.nan)/1e6,           
                              results_list[2].get("baseLCOS", np.nan),           
                              results_list[2].get("LCOSchange", np.nan)],  
-        full_names[3]: [results_list[3].get("baselineCAPEX", np.nan),   
-                             results_list[3].get("newCAPEX", np.nan),       
-                             results_list[3].get("baselineOPEX", np.nan),          
-                             results_list[3].get("newOPEX", np.nan),           
+        full_names[3]: [results_list[3].get("baselineCAPEX", np.nan)/1e6,   
+                             results_list[3].get("newCAPEX", np.nan)/1e6,       
+                             results_list[3].get("baselineOPEX", np.nan)/1e6,          
+                             results_list[3].get("newOPEX", np.nan)/1e6,           
                              results_list[3].get("baseLCOS", np.nan),           
                              results_list[3].get("LCOSchange", np.nan)],  
-        full_names[4]: [results_list[4].get("baselineCAPEX", np.nan),   
-                             results_list[4].get("newCAPEX", np.nan),       
-                             results_list[4].get("baselineOPEX", np.nan),          
-                             results_list[4].get("newOPEX", np.nan),           
+        full_names[4]: [results_list[4].get("baselineCAPEX", np.nan)/1e6,   
+                             results_list[4].get("newCAPEX", np.nan)/1e6,       
+                             results_list[4].get("baselineOPEX", np.nan)/1e6,          
+                             results_list[4].get("newOPEX", np.nan)/1e6,           
                              results_list[4].get("baseLCOS", np.nan),           
                              results_list[4].get("LCOSchange", np.nan)],  
-    
         }
     
         # Metric labels as row index
