@@ -238,11 +238,11 @@ if st.button("Run Analysis"):
     )
     
         # Display responsive dataframe
-         st.dataframe(
-            df.style.format("{:.2f}"),
-            use_container_width=True,
-            hide_index=False
-        )
+    st.dataframe(
+        df.style.format("{:.2f}"),
+        use_container_width=True,
+        hide_index=False
+    )
 
     # ---------------------------------------------------------
     # PLOTS — SHRINKED WITHOUT DISTORTION
