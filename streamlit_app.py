@@ -191,9 +191,9 @@ if st.button("Run Analysis"):
         # Map raw program names to nicer names
         full_names = {
             "H2": "Hydrogen (H2)",
-            "PHS": "Pumped Hydropower Storage (PHS)",
-            "BESS": "Lithium-Ion Battery (BESS)",
-            "CAES": "Adiabatic Compressed Air Energy Storage (CAES)",
+            "PHS": "Pumped Hydropower <br>Storage (PHS)",
+            "BESS": "Lithium-Ion Battery<br>(BESS)",
+            "CAES": "Adiabatic Compressed Air<br>Energy Storage (CAES)",
             "FLYWHEEL": "Flywheel"
         }
     
@@ -223,12 +223,23 @@ if st.button("Run Analysis"):
             ]
     
         df = pd.DataFrame(data, index=metric_labels)
+        # ---- CENTER ALL CELLS + HEADERS ----
+        df_styled = df.style.set_properties(**{
+            'text-align': 'center'
+        })
+        df_styled = df_styled.set_table_styles([
+            {"selector": "th", "props": [("text-align", "center")]}
+        ])
+
+    st.dataframe(
+        df_styled.format("{:.2f}"),
+        use_container_width=True,
+        hide_index=False
+    )
     
         # Display responsive dataframe
-        st.dataframe(
-            df.style.format({
-                col: "{:.2f}" for col in df.columns
-            }),
+         st.dataframe(
+            df.style.format("{:.2f}"),
             use_container_width=True,
             hide_index=False
         )
