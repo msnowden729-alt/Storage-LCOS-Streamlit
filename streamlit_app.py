@@ -224,11 +224,11 @@ if st.button("Run Analysis"):
     
         # ---- MULTILINE COLUMN HEADERS ----
         df = df.rename(columns={
-            "Hydrogen (H₂)": "Hydrogen<br>(H₂)",
-            "Pumped Hydro Storage (PHS)": "Pumped Hydro<br>Storage (PHS)",
-            "Li-Ion Battery (BESS)": "Li-Ion Battery<br>(BESS)",
-            "CAES Energy Storage": "CAES<br>Energy Storage",
-            "Flywheel Storage": "Flywheel<br>Storage"
+            "Hydrogen (H₂)": "Hydrogen (H₂)",
+            "Pumped Hydro Storage (PHS)": "Pumped Hydro Storage (PHS)",
+            "Li-Ion Battery (BESS)": "Li-Ion Battery (BESS)",
+            "CAES Energy Storage": "Compressed Air Energy Storage (CAES)",
+            "Flywheel Storage": "Flywheel"
         })
     
         # ---- CENTER ALL CELLS + HEADERS ----
